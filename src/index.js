@@ -43,8 +43,9 @@ HLSServer.prototype.attach = function (server, opts) {
 
 HLSServer.prototype._middleware = function (req, res, next) {
   var self = this
-
-  var uri = url.parse(req.url).pathname
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+  var uri = new url(req.url).pathname
   var relativePath = path.relative(self.path, uri)
   var filePath = path.join(self.dir, relativePath)
   var extension = path.extname(filePath)

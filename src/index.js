@@ -43,9 +43,7 @@ HLSServer.prototype.attach = function (server, opts) {
 
 HLSServer.prototype._middleware = function (req, res, next) {
   var self = this
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
-  var uri = new url(req.url).pathname
+  var uri = url.parse(req.url).pathname
   var relativePath = path.relative(self.path, uri)
   var filePath = path.join(self.dir, relativePath)
   var extension = path.extname(filePath)
@@ -60,6 +58,9 @@ HLSServer.prototype._middleware = function (req, res, next) {
     self._writeDebugPlayer(res, next)
     return
   }
+
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
 
   self.provider.exists(req, function (err, exists) {
     if (err) {
